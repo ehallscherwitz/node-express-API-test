@@ -7,10 +7,13 @@ exports.Shutdown = exports.Main = exports.httpServer = exports.application = voi
 const http_1 = __importDefault(require("http"));
 const express_1 = __importDefault(require("express"));
 require("./config/logging");
+require("reflect-metadata");
 const corsHandler_1 = require("./middleware/corsHandler");
 const loggingHandler_1 = require("./middleware/loggingHandler");
 const routeNotFound_1 = require("./middleware/routeNotFound");
 const config_1 = require("./config/config");
+const main_1 = __importDefault(require("./controllers/main"));
+const routes_1 = require("./modules/routes");
 exports.application = (0, express_1.default)();
 const Main = () => {
     logging.info('---------------------------------------');
@@ -26,11 +29,9 @@ const Main = () => {
     logging.info('---------------------------------------');
     logging.info('Define Controller Routing');
     logging.info('---------------------------------------');
-    exports.application.get('/main/healthcheck', (req, res, next) => {
-        //return res.status(200).json({ hello: 'world!' });
-    });
+    (0, routes_1.defineRoutes)([main_1.default], exports.application);
     logging.info('---------------------------------------');
-    logging.info('Define Controller Routing');
+    logging.info('Define Routing Error');
     logging.info('---------------------------------------');
     exports.application.use(routeNotFound_1.routeNotFound);
     logging.info('---------------------------------------');
